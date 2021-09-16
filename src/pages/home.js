@@ -1,23 +1,41 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import { useQuery, gql } from '@apollo/client';
 
-import { Link } from 'react-router-dom';
+import NoteFeed from '../components/NoteFeed';
+
+const GET_NOTES = gql`
+	query noteFeed($cursor: String) {
+		noteFeed(cursor: $cursor) {
+			cursor
+			hasNextPage
+			notes {
+				id
+				createdAt
+				content
+				favoriteCount
+				author {
+					username
+					id
+					avatar
+				}
+			}
+		}
+	}
+`;
 
 const Home = () => {
-	return (
-		<div>
-			<h1>Notedly</h1>
-			<p>This is the home page</p>
+	// Хук запроса
+	const { data, loading, error, fetchMore } = useQuery(GET_NOTES);
 
-			<ul>
-				<li>
-					<Link to="/mynotes">My Notes</Link>
-				</li>
-				<li>
-					<Link to="/favorites">Favorites</Link>
-				</li>
-			</ul>
-		</div>
-	);
+	if (loading) {
+		return <p>Loading...</p>;
+	}
+	if (error) {
+		return <p>Error!!</p>;
+	}
+	// Если загрузка данных произошла успешно, отображаем их в UI
+	return <NoteFeed notes={data.noteFeed.notes} />;
 };
 
 export default Home;
