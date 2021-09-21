@@ -20,9 +20,9 @@ const GET_NOTE = gql`
 `;
 
 const NotePage = props => {
-
+	// Сохраняем id из url в виде переменной
 	const id = props.match.params.id;
-
+	// Запрашиваем хук, передавая значение id в качестве переменной
 	const { loading, error, data } = useQuery(GET_NOTE, { variables: { id, } });
 
 	if (loading) {
