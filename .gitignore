@@ -66,6 +66,8 @@ typings/
 # built files
 dist
 .cache
+final/
+solutions/
 
 # cypress videos & screenshots
 cypress/videos
